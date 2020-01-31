@@ -9,7 +9,12 @@
 import UIKit
 
 class ImageCollectionViewCell: UICollectionViewCell {
-        
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = #imageLiteral(resourceName: "MarsPlaceholder")
+    }
+    
     // MARK: Properties
     
     // MARK: IBOutlets

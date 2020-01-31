@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Camera: Codable {
+struct Camera: Codable, Equatable {
     let id: Int
     let name: String
     let roverId: Int

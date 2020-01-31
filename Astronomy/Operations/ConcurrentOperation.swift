@@ -18,14 +18,28 @@ class ConcurrentOperation: Operation {
     
     // MARK: Properties
     
-    var state = State.isReady {
-        willSet {
-            willChangeValue(forKey: newValue.rawValue)
-            willChangeValue(forKey: state.rawValue)
+    private var _state = State.isReady
+    
+    private let stateQueue = DispatchQueue(label: "com.LambdaSchool.Astronomy.ConcurrentOperationStateQueue")
+    var state: State {
+        get {
+            var result: State?
+            let queue = self.stateQueue
+            queue.sync {
+                result = _state
+            }
+            return result!
         }
-        didSet {
+        
+        set {
+            let oldValue = state
+            willChangeValue(forKey: newValue.rawValue)
+            willChangeValue(forKey: oldValue.rawValue)
+            
+            stateQueue.sync { self._state = newValue }
+            
             didChangeValue(forKey: oldValue.rawValue)
-            didChangeValue(forKey: state.rawValue)
+            didChangeValue(forKey: newValue.rawValue)
         }
     }
     
